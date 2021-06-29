@@ -5,15 +5,19 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Parcel // annotation indicates class is Parcelable
 public class Tweet {
 
     public String body;
     public String createdAt;
     public User user;
+
+    public Tweet() {}
 
     public static Tweet fromJSON(JSONObject jsonObject) throws JSONException {
         Tweet tweet = new Tweet();

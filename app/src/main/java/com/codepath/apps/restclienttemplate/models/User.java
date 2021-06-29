@@ -4,12 +4,16 @@ import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
+@Parcel // annotation indicates class is Parcelable
 public class User {
 
     public String name;
     public String screenName;
     public String profileImageURL;
+
+    public User() {}
 
     public static User fromJSON(JSONObject jsonObject) throws JSONException {
         User user = new User();
