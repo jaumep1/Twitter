@@ -17,6 +17,7 @@ public class Tweet {
     public String createdAt;
     public User user;
     public String media;
+    public int id;
 
     public Tweet() {}
 
@@ -25,6 +26,7 @@ public class Tweet {
         tweet.body = jsonObject.getString("text");
         tweet.createdAt = jsonObject.getString("created_at");
         tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
+        tweet.id = jsonObject.getInt("id");
         Log.d("Tweet", jsonObject.toString());
 
         try {

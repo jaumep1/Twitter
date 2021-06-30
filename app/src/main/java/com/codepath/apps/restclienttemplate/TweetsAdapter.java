@@ -1,21 +1,27 @@
 package com.codepath.apps.restclienttemplate;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.databinding.ItemTweetBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+
+import org.parceler.Parcels;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
@@ -72,6 +78,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     //Define a ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        private final int REQUEST_CODE = 20;
+
         ImageView ivProfileImage;
         ImageView ivMedia;
         TextView tvScreenName;
@@ -79,6 +87,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         TextView tvTimeStamp;
         TextView tvName;
         ItemTweetBinding binding;
+        ImageView ivReply;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -89,6 +98,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvBody = binding.tvBody;
             tvTimeStamp = binding.tvTimeStamp;
             ivMedia = binding.ivMedia;
+            ivReply = binding.ivReply;
             ivMedia.setVisibility(View.INVISIBLE);
         }
 
@@ -106,6 +116,18 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             } else {
                 ivMedia.setVisibility(View.GONE);
             }
+
+            ivReply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("TweetsAdapter", "Reply clicked " + tweet.id);
+                    int position = getAdapterPosition();
+                    Intent intent = new Intent(context, ComposeActivity.class);
+                    intent.putExtra("baseString", tweets.get(position).user.screenName);
+                    intent.putExtra("id", tweets.get(position).id);
+                    ((Activity) context).startActivityForResult(intent, REQUEST_CODE);
+                }
+            });
         }
 
         @RequiresApi(api = Build.VERSION_CODES.O)

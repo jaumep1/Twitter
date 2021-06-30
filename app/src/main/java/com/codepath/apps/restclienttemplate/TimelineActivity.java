@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
@@ -57,6 +58,7 @@ public class TimelineActivity extends AppCompatActivity {
         rvTweets = binding.rvTweets;
         btnLogout = binding.btnLogout;
         swipeContainer = binding.swipeContainer;
+
         //Initialize the list of tweets and adapter
         tweets = new ArrayList<>();
         adapter = new TweetsAdapter(this, tweets);

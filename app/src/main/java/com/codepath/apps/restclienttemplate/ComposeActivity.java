@@ -39,12 +39,21 @@ public class ComposeActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-         client = TwitterApplication.getRestClient(this);
+        client = TwitterApplication.getRestClient(this);
 
         etCompose = binding.etCompose;
         btnTweet = binding.btnTweet;
+        Integer id = null;
+
+        try {
+            etCompose.setText(getIntent().getStringExtra("baseString") + " ");
+            id = getIntent().getIntExtra("id", -1);
+        } catch (Exception e) {
+
+        }
 
         //Set click listener
+        Integer finalId = id;
         btnTweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,30 +72,56 @@ public class ComposeActivity extends AppCompatActivity {
                 Toast.makeText(ComposeActivity.this,
                         "Tweeted!", Toast.LENGTH_LONG).show();
 
-                //Make an API call to Twitter to publish the tweet
-                client.publishTweet(tweetContent, new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Headers headers, JSON json) {
-                        Log.i(TAG, "onSuccess to publish tweet");
-                        try {
-                            Tweet tweet = Tweet.fromJSON(json.jsonObject);
-                            Log.i(TAG, "Published tweet says " + tweet.body);
+                Log.d("ComposeActivity", String.format("%d", finalId));
 
-                            Intent intent = new Intent();
-                            intent.putExtra("tweet", Parcels.wrap(tweet));
-                            setResult(RESULT_OK, intent);
-                            finish();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                //Make an API call to Twitter to publish the tweet
+                if (finalId == null) {
+                    client.publishTweet(tweetContent, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Headers headers, JSON json) {
+                            Log.i(TAG, "onSuccess to publish tweet");
+                            try {
+                                Tweet tweet = Tweet.fromJSON(json.jsonObject);
+                                Log.i(TAG, "Published tweet says " + tweet.body);
+
+                                Intent intent = new Intent();
+                                intent.putExtra("tweet", Parcels.wrap(tweet));
+                                setResult(RESULT_OK, intent);
+                                finish();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
                         }
 
-                    }
+                        @Override
+                        public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                            Log.e(TAG, "onFailure to publish tweet", throwable);
+                        }
+                    });
+                } else {
+                    client.publishTweet(tweetContent, finalId, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Headers headers, JSON json) {
+                            Log.i(TAG, "onSuccess to publish tweet with id " + finalId);
+                            try {
+                                Tweet tweet = Tweet.fromJSON(json.jsonObject);
+                                Log.i(TAG, "Published tweet says " + tweet.body);
 
-                    @Override
-                    public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                        Log.e(TAG, "onFailure to publish tweet", throwable);
-                    }
-                });
+                                Intent intent = new Intent();
+                                intent.putExtra("tweet", Parcels.wrap(tweet));
+                                setResult(RESULT_OK, intent);
+                                finish();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        @Override
+                        public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                            Log.e(TAG, "onFailure to publish tweet", throwable);
+                        }
+                    });
+                }
             }
         });
     }

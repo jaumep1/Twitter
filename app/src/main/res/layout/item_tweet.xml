@@ -20,10 +20,12 @@
         android:id="@+id/tvScreenName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:autoLink="all"
+        android:linksClickable="true"
         android:layout_below="@id/tvName"
         android:layout_marginStart="5dp"
         android:layout_toEndOf="@+id/ivProfileImage"
-        tools:text="@JaumePujadas2" />
+        tools:text="/@JaumePujadas2" />
 
     <TextView
         android:id="@+id/tvName"
@@ -31,6 +33,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_toEndOf="@+id/ivProfileImage"
+        android:autoLink="all"
+        android:linksClickable="true"
         tools:text="Jaume Pujadas" />
 
     <TextView
@@ -40,8 +44,12 @@
         android:layout_below="@id/tvScreenName"
         android:layout_marginStart="5dp"
         android:layout_marginTop="2dp"
+        android:layout_marginEnd="5dp"
+        android:layout_toStartOf="@+id/ivReply"
         android:layout_toEndOf="@+id/ivProfileImage"
-        tools:text="This is mmy tweet!" />
+        android:autoLink="all"
+        android:linksClickable="true"
+        tools:text="This is my tweet!" />
 
     <TextView
         android:id="@+id/tvTimeStamp"
@@ -61,4 +69,17 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         tools:srcCompat="@tools:sample/avatars" />
+
+    <ImageView
+        android:id="@+id/ivReply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ivMedia"
+        android:layout_below="@+id/tvTimeStamp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="0dp"
+        app:srcCompat="@android:drawable/ic_menu_revert" />
+
 </RelativeLayout>
