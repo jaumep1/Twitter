@@ -41,6 +41,8 @@ public class TimelineActivity extends AppCompatActivity {
     TweetsAdapter adapter;
     Button btnLogout;
     SwipeRefreshLayout swipeContainer;
+    // Instance of the progress action-view
+    MenuItem miActionProgressItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +102,7 @@ public class TimelineActivity extends AppCompatActivity {
                 try {
                     tweets.addAll(Tweet.fromJSONArray(jsonArray));
                     adapter.notifyDataSetChanged();
+                    hideProgressBar();
                 } catch (JSONException e) {
                     Log.e(TAG, "JSON exception", e);
                 }
@@ -117,6 +120,26 @@ public class TimelineActivity extends AppCompatActivity {
         //Inflate the menu
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Store instance of the menu item containing progress
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+        showProgressBar();
+
+        // Return to finish
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    public void showProgressBar() {
+        // Show progress item
+        miActionProgressItem.setVisible(true);
+    }
+
+    public void hideProgressBar() {
+        // Hide progress item
+        miActionProgressItem.setVisible(false);
     }
 
     @Override

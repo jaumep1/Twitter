@@ -45,11 +45,10 @@ public class ComposeActivity extends AppCompatActivity {
         btnTweet = binding.btnTweet;
         Integer id = null;
 
-        try {
-            etCompose.setText(getIntent().getStringExtra("baseString") + " ");
+        String text = getIntent().getStringExtra("baseString");
+        if (text != null) {
+            etCompose.setText(text + " ");
             id = getIntent().getIntExtra("id", -1);
-        } catch (Exception e) {
-
         }
 
         //Set click listener
