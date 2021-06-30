@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
@@ -43,14 +44,19 @@ public class TimelineActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_timeline);
+
+        ActivityTimelineBinding binding = ActivityTimelineBinding.inflate(getLayoutInflater());
+
+        // layout of activity is stored in a special property called root
+        View view = binding.getRoot();
+        setContentView(view);
 
         client = TwitterApplication.getRestClient(this);
 
         //Find RecyclerView
-        rvTweets = findViewById(R.id.rvTweets);
-        btnLogout = findViewById(R.id.btnLogout);
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        rvTweets = binding.rvTweets;
+        btnLogout = binding.btnLogout;
+        swipeContainer = binding.swipeContainer;
         //Initialize the list of tweets and adapter
         tweets = new ArrayList<>();
         adapter = new TweetsAdapter(this, tweets);

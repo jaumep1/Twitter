@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.codepath.apps.restclienttemplate.databinding.ItemTweetBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import java.time.Duration;
@@ -76,20 +77,25 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         TextView tvScreenName;
         TextView tvBody;
         TextView tvTimeStamp;
+        TextView tvName;
+        ItemTweetBinding binding;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
-            tvScreenName = itemView.findViewById(R.id.tvScreenName);
-            tvBody = itemView.findViewById(R.id.tvBody);
-            tvTimeStamp = itemView.findViewById(R.id.tvTimeStamp);
-            ivMedia = itemView.findViewById(R.id.ivMedia);
+            binding = ItemTweetBinding.bind(this.itemView);
+            ivProfileImage = binding.ivProfileImage;
+            tvName = binding.tvName;
+            tvScreenName = binding.tvScreenName;
+            tvBody = binding.tvBody;
+            tvTimeStamp = binding.tvTimeStamp;
+            ivMedia = binding.ivMedia;
             ivMedia.setVisibility(View.INVISIBLE);
         }
 
         @RequiresApi(api = Build.VERSION_CODES.O)
         public void bind(Tweet tweet) {
             tvBody.setText(tweet.body);
+            tvName.setText(tweet.user.name);
             tvScreenName.setText(tweet.user.screenName);
             tvTimeStamp.setText(getTimeDiff(tweet.createdAt));
             Glide.with(context).load(tweet.user.profileImageURL).into(ivProfileImage);
