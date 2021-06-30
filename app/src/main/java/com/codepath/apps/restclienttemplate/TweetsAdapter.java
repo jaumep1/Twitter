@@ -72,6 +72,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView ivProfileImage;
+        ImageView ivMedia;
         TextView tvScreenName;
         TextView tvBody;
         TextView tvTimeStamp;
@@ -82,6 +83,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvScreenName = itemView.findViewById(R.id.tvScreenName);
             tvBody = itemView.findViewById(R.id.tvBody);
             tvTimeStamp = itemView.findViewById(R.id.tvTimeStamp);
+            ivMedia = itemView.findViewById(R.id.ivMedia);
+            ivMedia.setVisibility(View.INVISIBLE);
         }
 
         @RequiresApi(api = Build.VERSION_CODES.O)
@@ -90,6 +93,13 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvScreenName.setText(tweet.user.screenName);
             tvTimeStamp.setText(getTimeDiff(tweet.createdAt));
             Glide.with(context).load(tweet.user.profileImageURL).into(ivProfileImage);
+            if (tweet.media != null) {
+                Log.d("Adapter", tweet.media + ", " + tweet.body);
+                Glide.with(context).load(tweet.media).into(ivMedia);
+                ivMedia.setVisibility(View.VISIBLE);
+            } else {
+                ivMedia.setVisibility(View.GONE);
+            }
         }
 
         @RequiresApi(api = Build.VERSION_CODES.O)

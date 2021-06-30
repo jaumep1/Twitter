@@ -16,6 +16,7 @@ public class Tweet {
     public String body;
     public String createdAt;
     public User user;
+    public String media;
 
     public Tweet() {}
 
@@ -24,6 +25,22 @@ public class Tweet {
         tweet.body = jsonObject.getString("text");
         tweet.createdAt = jsonObject.getString("created_at");
         tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
+        Log.d("Tweet", jsonObject.toString());
+
+        try {
+            tweet.media = jsonObject.getJSONObject("entities").getJSONArray("media")
+                    .getJSONObject(0).getString("media_url");
+            Log.d("Tweet", jsonObject.getJSONObject("entities").getJSONArray("media")
+                    .getJSONObject(0).toString());
+            //Update link from http:// to https://
+            if (tweet.media.substring(0,7).equals("http://")) {
+                tweet.media = tweet.media.substring(0, 4) + "s" + tweet.media.substring(4);
+            }
+        } catch (Exception e) {
+            //Log.e("Tweet", "No media found");
+            tweet.media = null;
+        }
+
         return tweet;
     }
 
