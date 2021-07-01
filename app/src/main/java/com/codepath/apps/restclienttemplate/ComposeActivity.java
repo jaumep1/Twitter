@@ -43,16 +43,16 @@ public class ComposeActivity extends AppCompatActivity {
 
         etCompose = binding.etCompose;
         btnTweet = binding.btnTweet;
-        Integer id = null;
+        Long id = null;
 
         String text = getIntent().getStringExtra("baseString");
         if (text != null) {
             etCompose.setText(text + " ");
-            id = getIntent().getIntExtra("id", -1);
+            id = getIntent().getLongExtra("id", -1);
         }
 
         //Set click listener
-        Integer finalId = id;
+        Long finalId = id;
         btnTweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,7 +90,6 @@ public class ComposeActivity extends AppCompatActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
                         }
 
                         @Override

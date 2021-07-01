@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,9 +22,6 @@ import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import org.parceler.Parcels;
 
-import java.time.Duration;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder> {
@@ -75,7 +71,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     }
 
     //Define a ViewHolder
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private final int REQUEST_CODE = 20;
 
@@ -90,6 +86,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             binding = ItemTweetBinding.bind(this.itemView);
             ivProfileImage = binding.ivProfileImage;
             tvName = binding.tvName;
@@ -106,7 +103,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvBody.setText(tweet.body);
             tvName.setText(tweet.user.name);
             tvScreenName.setText(tweet.user.screenName);
-            tvTimeStamp.setText(getTimeDiff(tweet.createdAt));
+            tvTimeStamp.setText(tweet.getTimeDiff());
             Glide.with(context).load(tweet.user.profileImageURL).into(ivProfileImage);
             if (tweet.media != null) {
                 Log.d("Adapter", tweet.media + ", " + tweet.body);
@@ -120,37 +117,33 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 @Override
                 public void onClick(View v) {
                     Log.d("TweetsAdapter", "Reply clicked " + tweet.id);
-                    int position = getAdapterPosition();
                     Intent intent = new Intent(context, ComposeActivity.class);
-                    intent.putExtra("baseString", tweets.get(position).user.screenName);
-                    intent.putExtra("id", tweets.get(position).id);
+                    intent.putExtra("baseString", tweet.user.screenName);
+                    intent.putExtra("id", tweet.id);
                     ((Activity) context).startActivityForResult(intent, REQUEST_CODE);
                 }
             });
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.O)
-        private String getTimeDiff(String then) {
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE LLL dd HH:mm:ss xxxx yyyy");
-            ZonedDateTime now = ZonedDateTime.now();
-            ZonedDateTime oldDate = ZonedDateTime.parse(then, dtf);
 
-            Duration diff = Duration.between(now, oldDate).abs();
 
-            if (diff.getSeconds() < 60) {
-                return String.format("%ds", diff.getSeconds());
-            } else if (diff.toMinutes() < 60) {
-                return String.format("%dm", diff.toMinutes());
-            } else if (diff.toHours() < 24) {
-                return String.format("%dh", diff.toHours());
-            } else if (diff.toDays() < 31) {
-                return String.format("%dd", diff.toDays());
-            } else if ((int) (diff.toDays() / 7) < 52) {
-                return String.format("%dw", (int) (diff.toDays() / 7));
-            } else if ((int) (diff.toDays() / 31) < 12) {
-                return String.format("%dm", (int) (diff.toDays() / 31));
-            } else {
-                return String.format("%dy", (int) (diff.toDays() / 365));
+        @Override
+        public void onClick(View v) {
+            Log.d("TweetsAdapter", "Click recognized.");
+
+            //Get position
+            int position = getAdapterPosition();
+
+            //Validate position
+            if (position != RecyclerView.NO_POSITION) {
+                Tweet tweet = tweets.get(position);
+
+                //Create intent
+                Intent intent = new Intent(context, TweetDetailsActivity.class);
+                intent.putExtra(Tweet.class.getSimpleName(), Parcels.wrap(tweet));
+
+                //Show activity
+                context.startActivity(intent);
             }
         }
     }
