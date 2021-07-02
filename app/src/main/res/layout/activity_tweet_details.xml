@@ -76,38 +76,40 @@
         android:layout_marginTop="0dp"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <ImageView
-        android:id="@+id/ivReply"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ToggleButton
+        android:id="@+id/tbRetweet"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_above="@+id/tvBody"
-        android:layout_below="@+id/tvTimeStamp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toStartOf="@+id/tbFav"
+        android:background="@drawable/ic_retweet"
+        android:buttonTint="@color/inline_action_retweet"
+        android:textOff=""
+        android:textOn="" />
+
+    <ToggleButton
+        android:id="@+id/tbFav"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_above="@+id/tvBody"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toStartOf="@+id/tbReply"
+        android:background="@drawable/ic_favorite"
+        android:textOff=""
+        android:textOn="" />
+
+    <ToggleButton
+        android:id="@+id/tbReply"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_above="@+id/tvBody"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        app:srcCompat="@android:drawable/ic_menu_revert" />
-
-    <ImageView
-        android:id="@+id/ivFav"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/tvBody"
-        android:layout_alignTop="@+id/ivReply"
-        android:layout_marginTop="0dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp"
-        android:layout_toStartOf="@+id/ivReply"
-        app:srcCompat="@android:drawable/ic_menu_save" />
-
-    <ImageView
-        android:id="@+id/ivRetweet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/tvBody"
-        android:layout_alignTop="@+id/ivReply"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_toStartOf="@+id/ivFav"
-        app:srcCompat="@android:drawable/ic_menu_send" />
+        android:background="@drawable/ic_vector_compose_dm"
+        android:textOff=""
+        android:textOn="" />
 </RelativeLayout>

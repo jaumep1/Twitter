@@ -10,9 +10,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.databinding.ActivityTweetDetailsBinding;
@@ -22,6 +24,7 @@ import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import org.json.JSONException;
 import org.parceler.Parcels;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import okhttp3.Headers;
 
 public class TweetDetailsActivity extends AppCompatActivity {
@@ -34,10 +37,10 @@ public class TweetDetailsActivity extends AppCompatActivity {
     TextView tvScreenName;
     TextView tvTimeStamp;
     TextView tvBody;
-    ImageView ivReply;
+    ToggleButton tbReply;
     ImageView ivMedia;
-    ImageView ivFav;
-    ImageView ivRetweet;
+    ToggleButton tbFav;
+    ToggleButton tbRetweet;
 
     Tweet tweet;
 
@@ -62,16 +65,19 @@ public class TweetDetailsActivity extends AppCompatActivity {
         tvTimeStamp = binding.tvTimeStamp;
         tvBody = binding.tvBody;
         ivMedia = binding.ivMedia;
-        ivReply = binding.ivReply;
-        ivFav = binding.ivFav;
-        ivRetweet = binding.ivRetweet;
+        tbReply = binding.tbReply;
+        tbFav = binding.tbFav;
+        tbRetweet = binding.tbRetweet;
 
         tvName.setText(tweet.user.name);
         tvScreenName.setText(tweet.user.screenName);
         tvTimeStamp.setText(tweet.getTimeDiff());
         tvBody.setText(tweet.body);
 
-        Glide.with(binding.getRoot()).load(tweet.user.profileImageURL).into(ivProfileImage);
+        Glide.with(binding.getRoot()).load(tweet.user.profileImageURL)
+                .centerCrop()
+                .transform(new RoundedCornersTransformation(30, 10))
+                .into(ivProfileImage);
         if (tweet.media != null) {
             Log.d("Adapter", tweet.media + ", " + tweet.body);
             Glide.with(binding.getRoot()).load(tweet.media).into(ivMedia);
@@ -80,7 +86,7 @@ public class TweetDetailsActivity extends AppCompatActivity {
             ivMedia.setVisibility(View.GONE);
         }
 
-        ivReply.setOnClickListener(new View.OnClickListener() {
+        tbReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Reply clicked " + tweet.id);
@@ -91,7 +97,7 @@ public class TweetDetailsActivity extends AppCompatActivity {
             }
         });
 
-        ivFav.setOnClickListener(new View.OnClickListener() {
+        tbFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Favorite clicked " + tweet.id);
@@ -111,7 +117,7 @@ public class TweetDetailsActivity extends AppCompatActivity {
             }
         });
 
-        ivRetweet.setOnClickListener(new View.OnClickListener() {
+        tbRetweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Retweet clicked " + tweet.id);
@@ -121,6 +127,7 @@ public class TweetDetailsActivity extends AppCompatActivity {
                         Log.i("TAG", "onSuccess to publish retweet");
                         Toast.makeText(TweetDetailsActivity.this,
                                 "Retweeted!", Toast.LENGTH_LONG).show();
+
                     }
 
                     @Override

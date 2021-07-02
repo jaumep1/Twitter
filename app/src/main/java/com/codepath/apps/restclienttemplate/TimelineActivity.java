@@ -3,6 +3,7 @@ package com.codepath.apps.restclienttemplate;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -39,7 +40,6 @@ public class TimelineActivity extends AppCompatActivity {
     RecyclerView rvTweets;
     List<Tweet> tweets;
     TweetsAdapter adapter;
-    Button btnLogout;
     SwipeRefreshLayout swipeContainer;
     // Instance of the progress action-view
     MenuItem miActionProgressItem;
@@ -58,14 +58,18 @@ public class TimelineActivity extends AppCompatActivity {
 
         //Find RecyclerView
         rvTweets = binding.rvTweets;
-        btnLogout = binding.btnLogout;
         swipeContainer = binding.swipeContainer;
 
         //Initialize the list of tweets and adapter
         tweets = new ArrayList<>();
         adapter = new TweetsAdapter(this, tweets);
         //Setup RecyclerView with layout manager and adapter
-        rvTweets.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        rvTweets.setLayoutManager(manager);
+        DividerItemDecoration dividerItemDecoration =
+                new DividerItemDecoration(rvTweets.getContext(),
+                manager.getOrientation());
+        rvTweets.addItemDecoration(dividerItemDecoration);
         rvTweets.setAdapter(adapter);
         populateHomeTimeline();
 
@@ -83,14 +87,6 @@ public class TimelineActivity extends AppCompatActivity {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                client.clearAccessToken(); // forget who's logged in
-                finish(); // navigate backwards to Login screen
-            }
-        });
     }
 
     private void populateHomeTimeline() {
@@ -150,6 +146,9 @@ public class TimelineActivity extends AppCompatActivity {
             Intent intent = new Intent(this, ComposeActivity.class);
             startActivityForResult(intent, REQUEST_CODE);
             return true;
+        } else if (item.getItemId() == R.id.logout) {
+            client.clearAccessToken(); // forget who's logged in
+            finish(); // navigate backwards to Login screen
         }
         return super.onOptionsItemSelected(item);
     }
