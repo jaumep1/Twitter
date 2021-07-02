@@ -1,7 +1,5 @@
 package com.codepath.apps.restclienttemplate.models;
 
-import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcel;
@@ -20,7 +18,6 @@ public class User {
         user.name = jsonObject.getString("name");
         user.screenName = String.format("@%s", jsonObject.getString("screen_name"));
         user.profileImageURL = jsonObject.getString("profile_image_url_https");
-
 
         return user;
     }

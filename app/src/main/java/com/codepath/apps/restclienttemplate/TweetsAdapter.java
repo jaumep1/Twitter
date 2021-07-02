@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -72,7 +71,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
-    //Define a ViewHolder
+    //Define a ViewHolder to hold a tweet
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private final int REQUEST_CODE = 20;
@@ -100,6 +99,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             ivMedia.setVisibility(View.INVISIBLE);
         }
 
+        //Bind information to tweet items
         @RequiresApi(api = Build.VERSION_CODES.O)
         public void bind(Tweet tweet) {
             tvBody.setText(tweet.body);
@@ -129,8 +129,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 }
             });
         }
-
-
 
         @Override
         public void onClick(View v) {

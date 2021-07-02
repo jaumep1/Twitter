@@ -14,14 +14,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 
 import com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.parceler.Parcels;
@@ -41,6 +38,7 @@ public class TimelineActivity extends AppCompatActivity {
     List<Tweet> tweets;
     TweetsAdapter adapter;
     SwipeRefreshLayout swipeContainer;
+
     // Instance of the progress action-view
     MenuItem miActionProgressItem;
 
@@ -66,13 +64,16 @@ public class TimelineActivity extends AppCompatActivity {
         //Setup RecyclerView with layout manager and adapter
         LinearLayoutManager manager = new LinearLayoutManager(this);
         rvTweets.setLayoutManager(manager);
+        //Create layout dividers
         DividerItemDecoration dividerItemDecoration =
                 new DividerItemDecoration(rvTweets.getContext(),
                 manager.getOrientation());
         rvTweets.addItemDecoration(dividerItemDecoration);
+        //Assign adapter
         rvTweets.setAdapter(adapter);
         populateHomeTimeline();
 
+        //Allow for swipe down to refresh
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -82,6 +83,7 @@ public class TimelineActivity extends AppCompatActivity {
                 fetchTimelineAsync(0);
             }
         });
+
         // Configure the refreshing colors
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
@@ -89,6 +91,7 @@ public class TimelineActivity extends AppCompatActivity {
                 android.R.color.holo_red_light);
     }
 
+    //Get timeline from twitter client
     private void populateHomeTimeline() {
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
@@ -155,6 +158,7 @@ public class TimelineActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        //Update timeline after tweeting
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             //Get data from the intent
             Tweet tweet = Parcels.unwrap(data.getParcelableExtra("tweet"));
@@ -168,6 +172,7 @@ public class TimelineActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    //Retrieve timeline from twitter client and populate tweets array
     public void fetchTimelineAsync(int page) {
         // Send the network request to fetch the updated data
         // `client` here is an instance of Android Async HTTP

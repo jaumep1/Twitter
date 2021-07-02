@@ -24,11 +24,11 @@ public class ComposeActivity extends AppCompatActivity {
     public static final String TAG = "ComposeActivity";
     public static final int MAX_TWEET_LENGTH = 140;
 
+    Long id;
     EditText etCompose;
     Button btnTweet;
 
     TwitterClient client;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +41,12 @@ public class ComposeActivity extends AppCompatActivity {
 
         client = TwitterApplication.getRestClient(this);
 
+        //bind variables
         etCompose = binding.etCompose;
         btnTweet = binding.btnTweet;
-        Long id = null;
+        id = null;
 
+        //Get reply info if replying
         String text = getIntent().getStringExtra("baseString");
         if (text != null) {
             etCompose.setText(text + " ");
@@ -58,6 +60,7 @@ public class ComposeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String tweetContent = etCompose.getText().toString();
 
+                //Notify user if tweet is valid
                 if (tweetContent.isEmpty()) {
                     Toast.makeText(ComposeActivity.this,
                             "Sorry, your tweet cannot be empty", Toast.LENGTH_LONG).show();
@@ -98,6 +101,7 @@ public class ComposeActivity extends AppCompatActivity {
                         }
                     });
                 } else {
+                    //Reply to tweet in thread
                     client.publishTweet(tweetContent, finalId, new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Headers headers, JSON json) {

@@ -50,6 +50,8 @@ public class TweetDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Get tweet information from previous activity
         tweet = Parcels.unwrap(getIntent().getParcelableExtra(Tweet.class.getSimpleName()));
 
         ActivityTweetDetailsBinding binding =
@@ -57,8 +59,8 @@ public class TweetDetailsActivity extends AppCompatActivity {
 
         setContentView(binding.getRoot());
 
+        //assign variables
         client = TwitterApplication.getRestClient(this);
-
         ivProfileImage = binding.ivProfileImage;
         tvName = binding.tvName;
         tvScreenName = binding.tvScreenName;
@@ -69,15 +71,16 @@ public class TweetDetailsActivity extends AppCompatActivity {
         tbFav = binding.tbFav;
         tbRetweet = binding.tbRetweet;
 
+        //Load data
         tvName.setText(tweet.user.name);
         tvScreenName.setText(tweet.user.screenName);
         tvTimeStamp.setText(tweet.getTimeDiff());
         tvBody.setText(tweet.body);
-
         Glide.with(binding.getRoot()).load(tweet.user.profileImageURL)
                 .centerCrop()
                 .transform(new RoundedCornersTransformation(30, 10))
                 .into(ivProfileImage);
+        //Optional media
         if (tweet.media != null) {
             Log.d("Adapter", tweet.media + ", " + tweet.body);
             Glide.with(binding.getRoot()).load(tweet.media).into(ivMedia);
@@ -86,6 +89,7 @@ public class TweetDetailsActivity extends AppCompatActivity {
             ivMedia.setVisibility(View.GONE);
         }
 
+        //assign button activities
         tbReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,7 +131,6 @@ public class TweetDetailsActivity extends AppCompatActivity {
                         Log.i("TAG", "onSuccess to publish retweet");
                         Toast.makeText(TweetDetailsActivity.this,
                                 "Retweeted!", Toast.LENGTH_LONG).show();
-
                     }
 
                     @Override
@@ -137,6 +140,5 @@ public class TweetDetailsActivity extends AppCompatActivity {
                 });
             }
         });
-
     }
 }

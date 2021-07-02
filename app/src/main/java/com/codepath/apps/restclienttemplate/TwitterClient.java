@@ -6,7 +6,6 @@ import android.util.Log;
 import com.codepath.asynchttpclient.RequestParams;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.codepath.oauth.OAuthBaseClient;
-import com.github.scribejava.apis.FlickrApi;
 import com.github.scribejava.apis.TwitterApi;
 import com.github.scribejava.core.builder.api.BaseApi;
 
@@ -45,6 +44,8 @@ public class TwitterClient extends OAuthBaseClient {
 	}
 	// CHANGE THIS
 	// DEFINE METHODS for different API endpoints here
+
+	//Endpoint for getting home timeline
 	public void getHomeTimeline(JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 		// Can specify query string params directly or through RequestParams.
@@ -55,6 +56,7 @@ public class TwitterClient extends OAuthBaseClient {
 		client.get(apiUrl, params, handler);
 	}
 
+	//Endpoint for publishing tweets
 	public void publishTweet(String tweetContent, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/update.json");
 		// Can specify query string params directly or through RequestParams.
@@ -64,6 +66,7 @@ public class TwitterClient extends OAuthBaseClient {
 
 	}
 
+	//Endpoint for replying in thread
 	public void publishTweet(String tweetContent, long replyID, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/update.json");
 		// Can specify query string params directly or through RequestParams.
@@ -74,6 +77,7 @@ public class TwitterClient extends OAuthBaseClient {
 
 	}
 
+	//Endpoint for retweeting
 	public void retweet(long retweetID, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/retweet.json");
 		// Can specify query string params directly or through RequestParams.
@@ -83,6 +87,7 @@ public class TwitterClient extends OAuthBaseClient {
 		client.post(apiUrl, params, "", handler);
 	}
 
+	//Endpoint for favoriting tweets
 	public void favorite(long retweetID, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("favorites/create.json");
 		// Can specify query string params directly or through RequestParams.

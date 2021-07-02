@@ -30,8 +30,6 @@ public class Tweet {
     public static Tweet fromJSON(JSONObject jsonObject) throws JSONException {
         Tweet tweet = new Tweet();
 
-        //Log.d("CHIRP", jsonObject.toString());
-
         if(jsonObject.has("full_text")) {
             tweet.body = jsonObject.getString("full_text");
         } else {
@@ -46,12 +44,13 @@ public class Tweet {
                     .getJSONObject(0).getString("media_url");
             Log.d("Tweet", jsonObject.getJSONObject("entities").getJSONArray("media")
                     .getJSONObject(0).toString());
+
             //Update link from http:// to https://
             if (tweet.media.substring(0,7).equals("http://")) {
                 tweet.media = tweet.media.substring(0, 4) + "s" + tweet.media.substring(4);
             }
         } catch (Exception e) {
-            //Log.e("Tweet", "No media found");
+            Log.e("Tweet", "No media found");
             tweet.media = null;
         }
 
@@ -66,6 +65,7 @@ public class Tweet {
         return tweets;
     }
 
+    //Compute timestamp value
     @RequiresApi(api = Build.VERSION_CODES.O)
     public String getTimeDiff() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE LLL dd HH:mm:ss xxxx yyyy");
